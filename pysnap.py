@@ -5,9 +5,6 @@ import os.path
 import string
 import random
 
-def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
-    return ''.join(random.choice(chars) for _ in range(size))
-#from time import time
 import time
 from utils import (encrypt, decrypt, decrypt_story,
                           make_media_id, request)
@@ -397,12 +394,11 @@ class Snapchat(object):
         return r.content
         
     def retry_post_story(self, data, cap="", time=10, timestamp=0):
-        """Post a snap to your story. Requires a media_id returned by the
-        upload method.
-        """
-        media_id = "{}~{}-{}-{}-{}-{}".format(self.username.upper(), id_generator(8), id_generator(4), id_generator(4), id_generator(4), id_generator(12))
-		#media_id = self.username.upper() + "~" + id_generator(8) + "-" + id_generator(4) + "-" + id_generator(4) + "-" + id_generator(4) + "-" id_generator(12)
-        r = self._request('bq/retry_post_story', {
+		"""Post a snap to your story. Requires a media_id returned by the
+		upload method.
+		"""
+		media_id = make_media_id(self.username)
+		r = self._request('bq/retry_post_story', {
             'username': self.username,
             'timestamp': timestamp,
             'media_id': media_id,
@@ -412,5 +408,5 @@ class Snapchat(object):
             'type': get_media_type(data),
             'time': time
             }, files={'data': encrypt(data)})
-        return r.content
+		return r.content
         
