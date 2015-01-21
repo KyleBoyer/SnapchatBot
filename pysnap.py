@@ -106,6 +106,7 @@ class Snapchat(object):
         r = self._request('loq/login', {
             'username': username.lower(),
             'password': password,
+            'timestamp': time.time() * 1000,
             'features_map': "[all_updates_friends_response]=1"
         })
         result = r.json()
@@ -409,4 +410,3 @@ class Snapchat(object):
             'time': time
             }, files={'data': encrypt(data)})
 		return r.content
-        
